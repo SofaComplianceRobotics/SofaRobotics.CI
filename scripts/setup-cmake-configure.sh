@@ -82,10 +82,8 @@ add-cmake-option \
     "-DCPACK_BINARY_TBZ2=OFF" "-DCPACK_BINARY_TGZ=OFF" "-DCPACK_BINARY_TXZ=OFF" \
     "-DCPACK_SOURCE_RPM=OFF" "-DCPACK_SOURCE_TBZ2=OFF" "-DCPACK_SOURCE_TGZ=OFF" \
     "-DCPACK_SOURCE_TXZ=OFF" "-DCPACK_SOURCE_TZ=OFF"
-add-cmake-option "-DCPACK_GENERATOR=ZIP;NSIS"
+add-cmake-option "-DCPACK_GENERATOR=ZIP"
 add-cmake-option "-DCPACK_BINARY_ZIP=ON"
-add-cmake-option "-DCPACK_BINARY_NSIS=ON"
-add-cmake-option "-DCPACK_BINARY_DEB=ON"
 
 add-cmake-option "--preset=minimal"
 
