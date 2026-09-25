@@ -37,6 +37,18 @@ install_windows_dependencies() {
     echo "EIGEN3_ROOT=$(cygpath -w "$EIGEN_INCLUDE")" >> "$GITHUB_ENV"
 }
 
+install_macos_dependencies() {
+    # Install dependencies using Homebrew
+    brew install boost eigen ninja tinyxml2 libpng libjpeg libtiff glew
+
+    # Set environment variables for Boost and Eigen
+    BOOST_PATH=$(brew --prefix boost)
+    EIGEN_INCLUDE=$(brew --prefix eigen)/include/eigen3
+
+    echo "BOOST_ROOT=$BOOST_PATH" >> "$GITHUB_ENV"
+    echo "EIGEN3_ROOT=$EIGEN_INCLUDE" >> "$GITHUB_ENV"
+}
+
 # Install build tools
 os="$(uname -s)"
 python_deps="numpy scipy pybind11==2.12.0"
@@ -56,6 +68,10 @@ case "$os" in
         install_windows_dependencies
         python_exe="./build/bin/python/python.exe"
         ;;
+    Darwin*)
+        install_macos_dependencies
+        python_exe="./build/bin/python/bin/python"
+    ;;
     *)
         echo "Unsupported OS: $os" >&2
         exit 1
@@ -63,5 +79,5 @@ case "$os" in
     esac
 
 # Python dependencies
-${python_exe} -m pip install --upgrade pip
-${python_exe} -m pip install ${python_deps}
+PYTHONNOUSERSITE=1 ${python_exe} -m pip install --upgrade pip
+PYTHONNOUSERSITE=1 ${python_exe} -m pip install ${python_deps}

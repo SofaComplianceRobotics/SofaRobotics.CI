@@ -50,6 +50,12 @@ if [[ "$os" == MINGW* || "$os" == MSYS* || "$os" == CYGWIN* || "$os" == Windows_
 else
     add-cmake-option "-DPython_EXECUTABLE=$BUILD_DIR/$PYTHON_DIR/bin/python3"
 fi
+
+if [[ "$os" == Darwin ]]; then
+    add-cmake-option "-DCMAKE_CXX_FLAGS=-flto=thin"
+    add-cmake-option "-DCMAKE_SHARED_LINKER_FLAGS=-flto=thin"
+    add-cmake-option "-DCMAKE_EXE_LINKER_FLAGS=-flto=thin"
+fi
 add-cmake-option "-DPython_ROOT_DIR=$BUILD_DIR/$PYTHON_DIR"
 add-cmake-option "-DSOFAPYTHON3_LOAD_BUNDLED_PYTHON=ON"
 add-cmake-option "-DSOFAPYTHON3_BUNDLED_PYTHON_PATH=$PYTHON_DIR"

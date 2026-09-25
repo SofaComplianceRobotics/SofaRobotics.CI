@@ -7,6 +7,8 @@ set -euo pipefail # Exit on error, unset variable, or pipe failure
 # - plugins : plugins source with a CMakeLists file 
 # - build/bin/python : Python build standalone from Astral (https://github.com/astral-sh/python-build-standalone/)
 
+os="$(uname -s)"
+
 # Clone sofa repository into src and use Compliance Robotics postinstall-fixup
 git clone https://github.com/sofa-framework/sofa.git src
 git clone https://github.com/SofaComplianceRobotics/SofaRobotics.CI.Tools.git tools
@@ -14,8 +16,8 @@ rm -r src/tools/postinstall-fixup
 mv tools/postinstall-fixup src/tools/postinstall-fixup
 
 # Rename project to SOFA-Robotics
-sed -i 's/CPACK_PACKAGE_NAME "SOFA/CPACK_PACKAGE_NAME "SOFA-Robotics/g' src/CMakeLists.txt
-sed -i 's/CPACK_PACKAGE_FILE_NAME "SOFA/CPACK_PACKAGE_FILE_NAME "SOFA-Robotics/g' src/CMakeLists.txt
+perl -pi -e 's/CPACK_PACKAGE_NAME "SOFA/CPACK_PACKAGE_NAME "SOFA-Robotics/g' src/CMakeLists.txt
+perl -pi -e 's/CPACK_PACKAGE_FILE_NAME "SOFA/CPACK_PACKAGE_FILE_NAME "SOFA-Robotics/g' src/CMakeLists.txt
 
 # Clone plugins into the plugins directory
 git clone --single-branch --branch pr_bundlepython https://github.com/SofaComplianceRobotics/SofaPython3.git plugins/SofaPython3
@@ -53,7 +55,9 @@ case "$os" in
     MINGW*|MSYS*|CYGWIN*|Windows_NT)
         download_url="https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.14.7+20260901-x86_64-pc-windows-msvc-install_only.tar.gz"
         ;;
-    # For MacOS - TODO
+    Darwin)
+        download_url="https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.14.7+20260901-aarch64-apple-darwin-install_only.tar.gz"
+        ;;
     *)
         echo "Unsupported OS: $os" >&2
         exit 1
