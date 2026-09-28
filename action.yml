@@ -23,7 +23,7 @@ inputs:
     required: false
     default: |
       {"https://github.com/sofa-framework/BeamAdapter.git": "master", 
-      "https://github.com/SofaComplianceRobotics/SofaPython3.git": "main", 
+      "https://github.com/SofaComplianceRobotics/SofaPython3.git": "master", 
       "https://github.com/SofaComplianceRobotics/SofaGLFW.git": "robotics",
       "https://github.com/SofaDefrost/SoftRobots.git": "master",
       "https://github.com/SofaDefrost/SoftRobots.Inverse.git": "main",
