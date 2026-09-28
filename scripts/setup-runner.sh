@@ -81,3 +81,8 @@ case "$os" in
 # Python dependencies
 PYTHONNOUSERSITE=1 ${python_exe} -m pip install --upgrade pip
 PYTHONNOUSERSITE=1 ${python_exe} -m pip install ${python_deps}
+
+# Custom requirements file if provided
+if [[ -f "requirements.txt" ]]; then
+    PYTHONNOUSERSITE=1 ${python_exe} -m pip install -r requirements.txt
+fi

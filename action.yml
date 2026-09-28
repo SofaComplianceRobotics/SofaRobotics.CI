@@ -1,0 +1,79 @@
+# !!Warning!!: 
+#   Avoid using this action if you just want the default SOFA Robotics binaries you can download from the release page of [SofaRobotics.CI](https://github.com/SofaComplianceRobotics/SofaRobotics.CI/releases). 
+#   Also avoid using it in a scheduled job.
+# This action builds SOFA from source to allow for custom plugin and dependencies.
+# Build SOFA-Robotics binaries for Linux, Windows and MacOS. 
+# By default, it builds the latest SOFA from main branch, the latest SoftRobot, SoftRobot.Inverse, STLIB, SofaPython3, BeamAdapter, Cosserat and Compliance Robotics SofaGLFW/robotics plugins
+# It then uploads the binaries as artifacts to the workflow run.
+# To retrieve the artifacts, go to the workflow run and download them from the "Artifacts" section. Or from within your action, use the "actions/download-artifact" action.
+
+name: Build SOFA-Robotics
+
+description: Build SOFA-Robotics binaries for Linux, Windows and MacOS. By default, it builds the latest SOFA commit from the main branch, the latest SoftRobot, SoftRobot.Inverse, STLIB, SofaPython3, BeamAdapter, Cosserat and Compliance Robotics SofaGLFW/robotics plugins.
+inputs:
+  os:
+    description: 'Operating system to build for (ubuntu-22.04, windows-2025, macos-14)'
+    required: true
+  sofa_target:
+    description: 'SOFA branch or commit to build'
+    required: false
+    default: 'main'
+  plugins_repos:
+    description: 'Plugins repository to add (custom link, branch, commit). Specified as JSON with repo url as key and branch as value. Example: {"https://github.com/SofaComplianceRobotics/SofaPython3.git": "main", "my/repo/path.git": "my-branch"}'
+    required: false
+    default: |
+      {"https://github.com/sofa-framework/BeamAdapter.git": "master", 
+      "https://github.com/SofaComplianceRobotics/SofaPython3.git": "main", 
+      "https://github.com/SofaComplianceRobotics/SofaGLFW.git": "robotics",
+      "https://github.com/SofaDefrost/SoftRobots.git": "master",
+      "https://github.com/SofaDefrost/SoftRobots.Inverse.git": "main",
+      "https://github.com/SofaDefrost/Cosserat.git": "master",
+      "https://github.com/SofaDefrost/STLIB.git": "master"}
+  python_version:
+    description: 'Python version to use (ex: 3.10.4)'
+    required: false
+    default: '3.14.7' # default Python version for Ubuntu 26.04
+  requirements_file:
+    description: 'URL or path to requirements.txt file for Python dependencies'
+    required: false
+    default: ''
+
+runs:
+    using: "composite"
+    steps:
+      - name: Download scripts
+        shell: bash
+        run: |
+          curl -o setup-download.sh https://raw.githubusercontent.com/SofaRobotics/SofaRobotics.CI/main/scripts/setup-download.sh
+          curl -o setup-runner.sh https://raw.githubusercontent.com/SofaRobotics/SofaRobotics.CI/main/scripts/setup-runner.sh
+          curl -o setup-cmake-configure.sh https://raw.githubusercontent.com/SofaRobotics/SofaRobotics.CI/main/scripts/setup-cmake-configure.sh
+          curl -o setup-ninja-compile.sh https://raw.githubusercontent.com/SofaRobotics/SofaRobotics.CI/main/scripts/setup-ninja-compile.sh
+          chmod +x setup-download.sh setup-runner.sh setup-cmake-configure.sh setup-ninja-compile.sh
+
+      - name: Make Script Files Executable
+        shell: bash
+        run: chmod +x setup-download.sh setup-runner.sh setup-cmake-configure.sh setup-ninja-compile.sh
+    
+      - name: Download SOFA, Plugins and Python
+        shell: bash
+        run: ./setup-download.sh "${{ inputs.sofa_target }}" "${{ inputs.plugins_repos }}" "${{ inputs.python_version }}" "${{ inputs.requirements_file }}"
+
+      - name: Setup Runner
+        shell: bash
+        run: ./setup-runner.sh
+
+      - name: Configure
+        shell: bash
+        run: ./setup-cmake-configure.sh build src plugins
+        
+      - name: Compile
+        shell: bash
+        run: ./setup-ninja-compile.sh build
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: SOFA-Robotics_${{ inputs.os }}
+          path: build/SOFA*.zip
+
+      

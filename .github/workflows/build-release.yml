@@ -7,6 +7,8 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * *' # Runs every night at midnight
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -32,29 +34,16 @@ jobs:
         with:
           arch: x64
 
-      - name: Make Script Files Executable
-        shell: bash
-        run: chmod +x scripts/setup-download.sh scripts/setup-runner.sh scripts/setup-cmake-configure.sh scripts/setup-ninja-compile.sh
-
-      - name: Download SOFA, Plugins and Python
-        shell: bash
-        run: ./scripts/setup-download.sh
-
-      - name: Setup Runner 
-        shell: bash
-        run: ./scripts/setup-runner.sh
-        
-      - name: Configure
-        shell: bash
-        run: ./scripts/setup-cmake-configure.sh build src plugins
-        
-      - name: Compile
-        shell: bash
-        run: ./scripts/setup-ninja-compile.sh build
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Build SOFA-Robotics
+        uses: ./
         with:
-          name: SOFA-Robotics_${{matrix.os}}
-          path: build/SOFA*.zip
-        
+          os: ${{matrix.os}}
+
+      - name: Get current date and time
+        shell: bash
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+      
+      - name: Create Release
+        run: |
+          echo "Uploading release for ${{matrix.os}}"
+          gh release create release-${{ github.ref_name }} build/SOFA*.zip --title "SOFA-Robotics ${{ github.ref_name }}" --notes "Release for ${{ github.ref_name }}. Last updated on ${{ env.NOW }}." --repo SofaRobotics/SofaRobotics.CI --latest
