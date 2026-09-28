@@ -56,7 +56,7 @@ runs:
     
       - name: Download SOFA, Plugins and Python
         shell: bash
-        run: ./setup-download.sh "${{ inputs.sofa_target }}" "${{ inputs.plugins_repos }}" "${{ inputs.python_version }}" "${{ inputs.requirements_file }}"
+        run: ./setup-download.sh "${{ inputs.sofa_target }}" '${{ inputs.plugins_repos }}' "${{ inputs.python_version }}" "${{ inputs.requirements_file }}"
 
       - name: Setup Runner
         shell: bash
