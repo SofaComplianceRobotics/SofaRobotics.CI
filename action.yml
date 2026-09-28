@@ -42,8 +42,14 @@ runs:
     using: "composite"
     steps:
       - name: Download scripts
-        if: [ ! -f scripts/setup-download.sh, ! -f scripts/setup-runner.sh, ! -f scripts/setup-cmake-configure.sh, ! -f scripts/setup-ninja-compile.sh ]
-        uses: actions/checkout@v4
+        shell: bash
+        run: |
+          if [[ ! -f "scripts/setup-download.sh" || ! -f "scripts/setup-runner.sh" || ! -f "scripts/setup-cmake-configure.sh" || ! -f "scripts/setup-ninja-compile.sh" ]]; then
+            curl -o scripts/setup-download.sh https://raw.githubusercontent.com/SofaComplianceRobotics/SofaRobotics.CI/main/scripts/setup-download.sh
+            curl -o scripts/setup-runner.sh https://raw.githubusercontent.com/SofaComplianceRobotics/SofaRobotics.CI/main/scripts/setup-runner.sh
+            curl -o scripts/setup-cmake-configure.sh https://raw.githubusercontent.com/SofaComplianceRobotics/SofaRobotics.CI/main/scripts/setup-cmake-configure.sh
+            curl -o scripts/setup-ninja-compile.sh https://raw.githubusercontent.com/SofaComplianceRobotics/SofaRobotics.CI/main/scripts/setup-ninja-compile.sh
+          fi
 
       - name: Make Script Files Executable
         shell: bash
