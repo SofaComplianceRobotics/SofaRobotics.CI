@@ -17,9 +17,9 @@ inputs:
   sofa_target:
     description: 'SOFA branch or commit to build'
     required: false
-    default: 'main'
+    default: 'master'
   plugins_repos:
-    description: 'Plugins repository to add (custom link, branch, commit). Specified as JSON with repo url as key and branch as value. Example: {"https://github.com/SofaComplianceRobotics/SofaPython3.git": "main", "my/repo/path.git": "my-branch"}'
+    description: 'Plugins repository to add (custom link, branch, commit). Specified as JSON with repo url as key and branch as value. Example: {"https://github.com/SofaComplianceRobotics/SofaPython3.git": "master", "my/repo/path.git": "my-branch"}'
     required: false
     default: |
       {"https://github.com/sofa-framework/BeamAdapter.git": "master", 
