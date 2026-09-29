@@ -27,8 +27,9 @@ inputs:
       "https://github.com/SofaDefrost/SoftRobots.git": "master",
       "https://github.com/SofaDefrost/SoftRobots.Inverse.git": "main",
       "https://github.com/SofaDefrost/Cosserat.git": "master",
-      "https://github.com/SofaDefrost/STLIB.git": "master"}
-      "https://github.com/SofaComplianceRobotics/SofaGLFW.git": "robotics",
+      "https://github.com/SofaDefrost/STLIB.git": "master",
+      "https://github.com/SofaComplianceRobotics/SofaGLFW.git": "robotics"
+      }
   python_version:
     description: 'Python version to use (ex: 3.10.4)'
     required: false
