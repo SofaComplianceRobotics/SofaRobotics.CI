@@ -42,11 +42,37 @@ jobs:
         with:
           os: ${{matrix.os}}
 
+  release:
+    name: Create Release
+    runs-on: ubuntu-22.04
+    needs: build
+    if: github.event_name != 'pull_request'
+    permissions: 
+      contents: write
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: SOFA-Robotics_*
+          path: build
+          merge-multiple: true
+
       - name: Get current date and time
         shell: bash
         run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
       
       - name: Create Release
+        shell: bash
+        env:
+          RELEASE_TAG: release-${{ github.ref_name }}
+          RELEASE_REPO: SofaComplianceRobotics/SofaRobotics.CI
         run: |
-          echo "Uploading release for ${{matrix.os}}"
-          gh release create release-${{ github.ref_name }} build/SOFA*.zip --clobber --title "SOFA-Robotics ${{ github.ref_name }}" --notes "Release for ${{ github.ref_name }}. Last updated on ${{ env.NOW }}." --repo SofaComplianceRobotics/SofaRobotics.CI --latest
+          echo "Uploading release ${RELEASE_TAG}"
+          if gh release view "${RELEASE_TAG}" --repo "${RELEASE_REPO}" >/dev/null 2>&1; then
+            gh release delete "${RELEASE_TAG}" --repo "${RELEASE_REPO}" --yes --cleanup-tag
+          fi
+          gh release create "${RELEASE_TAG}" build/SOFA*.zip \
+            --title "SOFA-Robotics ${GITHUB_REF_NAME}" \
+            --notes "Release for ${GITHUB_REF_NAME}. Last updated on ${NOW}." \
+            --repo "${RELEASE_REPO}" \
+            --latest
