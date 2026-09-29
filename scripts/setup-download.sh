@@ -21,7 +21,7 @@ echo "SOFA target: $sofa_target"
 echo "Plugins repos: $plugins_repos"
 echo "Python version: $python_version"
 echo "Requirements file: $requirements_file_url"
-echo "-------------------------------------------------"
+echo "------------------------------------------------------"
 
 validate_plugins_repos() {
     # json looks like {"https://url.to/plugin/repo.git": "branch_or_commit", "https://url.to/another/plugin.git": "branch_or_commit"}
