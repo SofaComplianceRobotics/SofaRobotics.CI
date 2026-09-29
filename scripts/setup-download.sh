@@ -15,11 +15,13 @@ else
     usage; exit 1
 fi
 
+echo "--------------- setup-download.sh args ---------------"
 echo "Running setup-download.sh with the following parameters:"
 echo "SOFA target: $sofa_target"
 echo "Plugins repos: $plugins_repos"
 echo "Python version: $python_version"
 echo "Requirements file: $requirements_file_url"
+echo "-------------------------------------------------"
 
 validate_plugins_repos() {
     # json looks like {"https://url.to/plugin/repo.git": "branch_or_commit", "https://url.to/another/plugin.git": "branch_or_commit"}
@@ -103,6 +105,7 @@ case "$os" in
         ;;
 esac
 
+echo "Downloading Python from $download_url"
 curl -L --fail --show-error -o cpython.tar.gz  "$download_url"
 tar -xf cpython.tar.gz
 mkdir build
@@ -128,6 +131,8 @@ echo "### Working Directory:"
 ls 
 echo "### plugins Directory:"
 ls plugins
+echo "---plugins/CMakeLists.txt---"
+cat plugins/CMakeLists.txt
 echo "### build/bin Directory:"
 ls build/bin
 echo "################################################"
