@@ -49,4 +49,4 @@ jobs:
       - name: Create Release
         run: |
           echo "Uploading release for ${{matrix.os}}"
-          gh release create release-${{ github.ref_name }} build/SOFA*.zip --title "SOFA-Robotics ${{ github.ref_name }}" --notes "Release for ${{ github.ref_name }}. Last updated on ${{ env.NOW }}." --repo SofaComplianceRobotics/SofaRobotics.CI --latest
+          gh release create release-${{ github.ref_name }} build/SOFA*.zip --clobber --title "SOFA-Robotics ${{ github.ref_name }}" --notes "Release for ${{ github.ref_name }}. Last updated on ${{ env.NOW }}." --repo SofaComplianceRobotics/SofaRobotics.CI --latest
