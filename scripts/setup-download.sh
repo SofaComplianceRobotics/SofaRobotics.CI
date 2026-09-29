@@ -76,6 +76,7 @@ echo "cmake_minimum_required(VERSION 3.12)" >> plugins/CMakeLists.txt
 # Clone plugins into the plugins directory
 echo "$plugins_repos" | jq -r 'to_entries[] | "\(.key) \(.value)"' | while read -r repo head; do
     plugin_name=$(basename "$repo" .git)
+    head="${head%$'\r'}"
     echo "Cloning plugin $plugin_name from $repo at $head into plugins/$plugin_name"
     git clone "$repo" "plugins/$plugin_name"
     if [ -n "$head" ]; then
