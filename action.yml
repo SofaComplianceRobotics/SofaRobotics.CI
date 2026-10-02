@@ -38,6 +38,10 @@ inputs:
     description: 'URL or path to requirements.txt file for Python dependencies'
     required: false
     default: ''
+  sofa_version:
+    description: 'Name of the SOFA version. If empty, it will take the value of the sofa_target input.'
+    required: false
+    default: ''
 
 runs:
     using: "composite"
@@ -58,7 +62,7 @@ runs:
     
       - name: Download SOFA, Plugins and Python
         shell: bash
-        run: ./scripts/setup-download.sh "${{ inputs.sofa_target }}" '${{ inputs.plugins_repos }}' "${{ inputs.python_version }}" "${{ inputs.requirements_file }}"
+        run: ./scripts/setup-download.sh "${{ inputs.sofa_target }}" '${{ inputs.plugins_repos }}' "${{ inputs.python_version }}" "${{ inputs.requirements_file }}" "${{ inputs.sofa_version || inputs.sofa_target }}"
 
       - name: Setup Runner
         shell: bash

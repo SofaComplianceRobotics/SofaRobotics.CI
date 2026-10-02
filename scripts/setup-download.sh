@@ -3,14 +3,15 @@
 set -euo pipefail # Exit on error, unset variable, or pipe failure
 
 usage() {
-    echo "Usage: setup-download.sh <sofa-target> <plugins> <python-version> <requirements-file>"
+    echo "Usage: setup-download.sh <sofa-target> <plugins> <python-version> <requirements-file> <sofa-version>"
 }
 
-if [[ "$#" -ge 4 ]]; then
+if [[ "$#" -ge 5 ]]; then
     sofa_target="$1"
     plugins_repos="$2"
     python_version="$3"
     requirements_file_url="$4"
+    sofa_version="$5"
 else
     usage; exit 1
 fi
@@ -61,8 +62,9 @@ rm -r src/tools/postinstall-fixup
 mv tools/postinstall-fixup src/tools/postinstall-fixup
 
 # Rename project to SOFA-Robotics
-perl -pi -e 's/CPACK_PACKAGE_NAME "SOFA/CPACK_PACKAGE_NAME "SOFA-Robotics/g' src/CMakeLists.txt
-perl -pi -e 's/CPACK_PACKAGE_FILE_NAME "SOFA/CPACK_PACKAGE_FILE_NAME "SOFA-Robotics/g' src/CMakeLists.txt
+perl -pi -e 'BEGIN { $sofa_version = shift @ARGV } s/CPACK_PACKAGE_NAME "SOFA v\$\{CPACK_PACKAGE_VERSION\}/CPACK_PACKAGE_NAME "SOFA-Robotics-$sofa_version/g' "$sofa_version" src/CMakeLists.txt
+perl -pi -e 'BEGIN { $sofa_version = shift @ARGV } s/CPACK_PACKAGE_FILE_NAME "SOFA_v\$\{CPACK_PACKAGE_VERSION\}/CPACK_PACKAGE_FILE_NAME "SOFA-Robotics-$sofa_version/g' "$sofa_version" src/CMakeLists.txt
+
 
 # Plugins
 mkdir -p plugins
