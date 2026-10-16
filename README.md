@@ -40,7 +40,7 @@ Specificities:
 
     # [Optional] Plugins repository to add (custom link, branch, commit). Specified as JSON with repo url as key and branch as value. Example: {"https://github.com/SofaComplianceRobotics/SofaPython3.git": "master", "my/repo/path.git": "my-branch"}
     # Default is {"https://github.com/sofa-framework/BeamAdapter.git": "master",
-    #    "https://github.com/SofaComplianceRobotics/SofaPython3.git": "master",
+    #    "https://github.com/SofaComplianceRobotics/SofaPython3.git": "pr_bundlepython",
     #    "https://github.com/SofaDefrost/SoftRobots.git": "master",
     #    "https://github.com/SofaDefrost/SoftRobots.Inverse.git": "main",
     #    "https://github.com/SofaDefrost/Cosserat.git": "master",
