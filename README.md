@@ -57,7 +57,7 @@ Specificities:
     # Default is empty
     requirements_file:
 
-    # [Optional] Name of the SOFA version. If empty, it will take the value of the sofa_target input.
+    # [Optional] The SOFA version in the binaries filename. If empty, it will take the value of the sofa_target input.
     # Default is empty
     sofa_version:
 ```
