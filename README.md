@@ -49,7 +49,7 @@ Specificities:
     #    }
     plugins_repos:
 
-    # [Optional] Python version to use (ex: 3.10.4)
+    # [Optional] Python version to use (in: 3.10.21, 3.11.16, 3.12.14, 3.13.15, 3.14.7, 3.15.0)
     # Default is '3.14.7'
     python_version:
 
