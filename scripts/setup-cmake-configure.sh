@@ -1,15 +1,17 @@
-#!/bin/bash
+"${{ inputs.python_version }}" #!/bin/bash
 
 set -euo pipefail # Exit on error, unset variable, or pipe failure
 
 usage() {
-    echo "Usage: setup-cmake-configure.sh <build-dir> <src-dir> <plugins-dir>"
+    echo "Usage: setup-cmake-configure.sh <build-dir> <src-dir> <plugins-dir> <python-version>"
 }
 
-if [ "$#" -ge 3 ]; then
+if [ "$#" -ge 4 ]; then
     BUILD_DIR="$(cd "$1" && pwd)"
     SRC_DIR="$(cd "$2" && pwd)"
     PLUGINS_DIR="$(cd "$3" && pwd)"
+    PYTHON_VERSION="$4"
+    PYTHON_MAJOR_MINOR="${PYTHON_VERSION%.*}"
     PYTHON_DIR="bin/python"
 else
     usage; exit 1
@@ -21,6 +23,7 @@ echo "--------------- setup-cmake-configure.sh vars ---------------"
 echo "BUILD_DIR = $BUILD_DIR"
 echo "SRC_DIR = $SRC_DIR"
 echo "PLUGINS_DIR = $PLUGINS_DIR"
+echo "PYTHON_VERSION = $PYTHON_VERSION"
 echo "-------------------------------------------------"
 
 #############
@@ -62,7 +65,7 @@ add-cmake-option "-DSOFAPYTHON3_BUNDLED_PYTHON_PATH=$PYTHON_DIR"
 if [[ "$os" == MINGW* || "$os" == MSYS* || "$os" == CYGWIN* || "$os" == Windows_NT ]]; then
     add-cmake-option "-Dpybind11_DIR=$BUILD_DIR/$PYTHON_DIR/Lib/site-packages/pybind11/share/cmake/pybind11"
 else
-    add-cmake-option "-Dpybind11_DIR=$BUILD_DIR/$PYTHON_DIR/lib/python3.14/site-packages/pybind11/share/cmake/pybind11"
+    add-cmake-option "-Dpybind11_DIR=$BUILD_DIR/$PYTHON_DIR/lib/python$PYTHON_MAJOR_MINOR/site-packages/pybind11/share/cmake/pybind11"
 fi
 
 # Plugins
