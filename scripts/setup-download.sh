@@ -77,21 +77,25 @@ echo "cmake_minimum_required(VERSION 3.12)" >> plugins/CMakeLists.txt
 
 # Clone plugins into the plugins directory
 echo "$plugins_repos" | jq -r 'to_entries[] | "\(.key) \(.value)"' | while read -r repo head; do
+    repo="${repo%$'\r'}"
+    head="${head%$'\r'}"
+    
     plugin_name=$(basename "$repo" .git)
     plugin_path="$plugin_name" # Default plugin path is the plugin name
+    
     if [[ "$head" =~ ^\{.*\}$ ]]; then # head is a dict of {branch: branch_name, path: plugin_path_in_repo} 
-        # extract the branch name and plugin path 
         branch=$(jq -r '.branch' <<<"$head")
         plugin_path=$(jq -r '.path' <<<"$head")
         head="$branch"
-    else # head is branch name
-        head="${head%$'\r'}"
     fi
+    
     echo "Cloning plugin $plugin_name from $repo at $head into plugins/$plugin_name"
     git clone "$repo" "plugins/$plugin_name"
+    
     if [ -n "$head" ]; then
         git -C "plugins/$plugin_name" checkout "$head"
     fi
+    
     echo "sofa_add_subdirectory(plugin $plugin_path $plugin_name ON)" >> plugins/CMakeLists.txt
 done
 
