@@ -55,8 +55,8 @@ validate_python_version "$python_version"
 os="$(uname -s)"
 
 # Clone sofa repository into src and use Compliance Robotics postinstall-fixup
-git clone https://github.com/sofa-framework/sofa.git src
-git -C src checkout "$sofa_target"
+git clone https://github.com/SofaComplianceRobotics/sofa.git src
+git -C src checkout "temp_fixsolverimplicitproblems"
 git clone https://github.com/SofaComplianceRobotics/SofaRobotics.CI.Tools.git tools
 rm -r src/tools/postinstall-fixup
 mv tools/postinstall-fixup src/tools/postinstall-fixup
