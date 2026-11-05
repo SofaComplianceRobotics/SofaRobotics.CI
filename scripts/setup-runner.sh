@@ -51,7 +51,7 @@ install_macos_dependencies() {
 
 # Install build tools
 os="$(uname -s)"
-python_deps="numpy scipy pybind11==2.12.0"
+python_deps="numpy scipy pybind11"
 python_exe=""
 
 case "$os" in
