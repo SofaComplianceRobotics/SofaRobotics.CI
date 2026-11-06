@@ -9,7 +9,7 @@ Specificities:
 ## Action Usage 
 
 > [!WARNING]
-> Avoid using this action if you just want the default SOFA Robotics binaries you can download from the release page of [SofaRobotics.CI/release](https://github.com/SofaComplianceRobotics/SofaRobotics.CI/releases).
+> Avoid using this action if you just want the default SOFA Robotics binaries you can download from the release page of [SofaRobotics.CI/release](https://github.com/SofaComplianceRobotics/SofaRobotics.CI/releases). Binaries are generated weekly on Sundays. 
 > Also avoid using it in a scheduled job.
 
 - This action builds SOFA from source to allow for custom plugin and dependencies.
